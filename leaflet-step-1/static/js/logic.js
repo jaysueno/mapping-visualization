@@ -1,19 +1,19 @@
 // const API_KEY = "pk.eyJ1IjoiamF5c3Vlbm8iLCJhIjoiY2tmZGFjN2Y4MGJsbDJxcXdpaGZzYmVoYiJ9.g3UMwdmRpfd0l_NLHVtFwg";
 
-
 // Create a leaflet map object using "L.map()"
 var myMap = L.map("map", {
-    center: [37.09, -95.71],
-    zoom: 3
-    // layers: [lightmap]
+    center: [37.09, -110.71],
+    zoom: 4
+    // layers: [lightmap, streetMap]
 });
+
 
 var baseMaps = {
     "Light Map": lightmap
 };
 
 // Add a tile layer using "L.tilelayer()" 
-L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+var streetMap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
     tileSize: 512,
     maxZoom: 18,
@@ -28,6 +28,8 @@ var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{
     id: "light-v10",
     accessToken: API_KEY
 });
+
+
 
 // Add "light-v10" to our tilelayers on our map
 lightmap.addTo(myMap);
@@ -76,14 +78,15 @@ d3.json(url).then(function(data) {
         // Set the marker radius
         L.circle(latlon, {
             stroke: "black",
-            fillOpacity: 0.75, 
+            fillOpacity: 0.5, 
             color: '#FDFEFE',
             fillColor: markerColor(depth),
             fillOpacity: .6,
             weight: 1,
             // set marker size to reflect the magnitude
             radius: mag * 25000
-        }).addTo(myMap);
+        }).bindPopup(`<h3>Location:${place}</h3><p>Magnitude: ${mag}</p>`)
+        .addTo(myMap);
 
         
     }
