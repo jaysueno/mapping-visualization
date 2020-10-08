@@ -32,7 +32,7 @@ var url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.ge
 
 // Create a function that will define the marker size based on the "magnitude" of the earthquake
 function markerSize(magnitude) {
-    return magnitude * 2500;
+    return magnitude * 30000;
 }
 
 // Use D3 promise to call the data get a response to populate the markers on the map
@@ -40,5 +40,49 @@ d3.json(url).then(function(data) {
     // Loop through locations and create city and state markers
     for (var i = 0; i < data.features.length; i++) {
         console.log(data.features.length);
+        // Declare variables
+        var lat = data.features[i].geometry.coordinates[1];
+        var lon = data.features[i].geometry.coordinates[0];
+        var latlon = [lat,lon];
+        var mag = data.features[i].properties.mag;
+        var depth = data.features[i].geometry.coordinates[2];
+        var place = data.features[i].properties.place;
+        console.log(place)
+
+        // Set the color fill based on the depth of earthquake
+        var fill = "";
+        if (depth > 90) {
+            fill = "red"
+        }
+        else if (depth >70) {
+            fill = "orange"
+        }
+        else if (depth > 30) {
+            fill = "yellow"
+        }
+        else {
+            fill = "green"
+        }
+
+        // Set the marker radius
+        L.circle(latlon, {
+            stroke: false,
+            fillOpacity: 0.75, 
+            color: fill,
+            fillColor: fill,
+            radius: markerSize(mag)
+        }).addTo(myMap);
+
+        
     }
 })
+
+// Create Legend
+var legend = L.control({position: "bottomright"});
+legend.onAdd = function() {
+    var div = L.DomUtil.create("div", "Info Legend");
+    var depth_label = [-10, 10, 30, 50, 70, 90];
+    return div
+};
+
+legend.addTo(myMap)
