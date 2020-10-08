@@ -2,4 +2,4 @@
 
 In this exercise I will show you how to create a Leaflet map that will visualize earthquake data from the USGS. It will look like the following screen shot.
 
-![map1](images/viz1.jpg)
+![map1](Images/viz1.jpg)
