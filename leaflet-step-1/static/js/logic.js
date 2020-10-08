@@ -1,5 +1,3 @@
-// const API_KEY = "pk.eyJ1IjoiamF5c3Vlbm8iLCJhIjoiY2tmZGFjN2Y4MGJsbDJxcXdpaGZzYmVoYiJ9.g3UMwdmRpfd0l_NLHVtFwg";
-
 // Create a leaflet map object using "L.map()"
 var myMap = L.map("map", {
     center: [37.09, -110.71],
