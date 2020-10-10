@@ -12,6 +12,11 @@ var baseMaps = {
     "Street Map": streetMap
 };
 
+// Add layer control
+L.control.layers(lightmap, satellitemap, {
+    collapsed: true
+}).addTo(myMap);
+
 // Add a tile layer using "L.tilelayer()" 
 var streetMap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
@@ -39,7 +44,7 @@ var satellitemap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/
 });
 
 // Add "light-v10" to our tilelayers on our map
-lightmap.addTo(myMap);
+// lightmap.addTo(myMap);
 
 // Create a function that will define the marker size based on the "magnitude" of the earthquake
 function markerSize(magnitude) {
@@ -95,55 +100,7 @@ d3.json(url).then(function(data) {
         }).bindPopup(`<h3>Location:${place}</h3><p>Magnitude: ${mag}</p>`)
         .addTo(myMap); 
     }
-})
-
-// The function markEarthquakes will take as an argument the data provided by the JSON query and construct a marker group from it. The marker group is returned
-var markEarthquakes = function(earthquakeData) {
-
-    // Initialize an array to hold earthquake markers
-    var earthquakeMarkers = [];
-    var deptharray = [];
-    for (i = 0; i < earthquakeData.length; i++) {
-        // console.log(i)
-
-        // Extract the latitude, longitude, depth, and magnitude data from the coordinates array of the geometry
-        var lon = earthquakeData[i].geometry.coordinates[0];
-        var lat = earthquakeData[i].geometry.coordinates[1];
-        var depth = earthquakeData[i].geometry.coordinates[2];
-        var mag = earthquakeData[i].properties.mag;
-        var place = earthquakeData[i].properties.place;
-        // console.log(earthquakeData[i].geometry.coordinates)
-        // console.log(lat,lon)
-        deptharray.push(depth)
-
-
-        // Create a circle for each earthquake. The popup will include information about the lication
-        var earthquakeMarker = L.circle([lat, lon], {
-            // Scale the radius by the magnitude of the earthquake
-            radius: 35000 * mag,
-            // Stroke color
-            color: '#000000',
-            weight: 1,
-            // Set the color of the circle based on the depth of the earthquake
-            fillColor: getColor(depth),
-            fillOpacity: 0.5
-        }).bindPopup(`<h3>Location:${place}</h3><p><strong>Magnitude:</strong> ${mag}, <strong>Depth:</strong> ${depth}</p><p></p>`)
-
-        // Add marker to the earthquakeMarkers array
-        earthquakeMarkers.push(earthquakeMarker)
-        
-    }
-    // console.log(Math.max(...deptharray))
-    // console.log(Math.min(...deptharray))
-    // console.log(earthquakeMarkers)
-    var earthquakeMarkersGroup = L.layerGroup(earthquakeMarkers)
-
-
-    // Call the createMap function
-    // createMap(earthquakeMarkersGroup)
-    return earthquakeMarkersGroup
-
-};
+});
 
 // Create Legend
 var legend = L.control({
